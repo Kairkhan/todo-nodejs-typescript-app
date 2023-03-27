@@ -3,7 +3,7 @@ import { Pool } from 'pg'
 import {PostgresTaskDataSource} from "./data/data-sources/postgres/postgres-task-data-source";
 import TaskRouter from "./presentation/task-router";
 import {GetAllTasks} from "./domain/use-cases/task/get-all-tasks";
-import {TaskRepositoryImpl} from "./domain/repositories/task.repository";
+import {TaskRepositoryImpl} from "./domain/repositories/task-repository";
 import {CreateTask} from "./domain/use-cases/task/create-task";
 
 async function getPGDS() {
