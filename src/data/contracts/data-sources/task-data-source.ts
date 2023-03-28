@@ -5,4 +5,5 @@ export interface TaskDataSource {
     getAll(): Promise<Task[]>;
     getOneById(id: string): Promise<Task>;
     update(task: Task): Promise<boolean>;
+    delete(task: Task): Promise<boolean>;
 }

@@ -45,4 +45,13 @@ export class PostgresTaskDataSource implements TaskDataSource {
 
         return result !== null;
     }
+
+   async delete(task: Task): Promise<boolean> {
+         const result = await this.database.query(`
+             DELETE FROM ${DB_TABLE}
+             WHERE id = $1;
+        `, [task.id]);
+
+        return result !== null;
+    }
 }

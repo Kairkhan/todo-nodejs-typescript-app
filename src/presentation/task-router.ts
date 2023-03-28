@@ -5,6 +5,7 @@ import {CreateTaskUseCase} from "../domain/contracts/use-cases/create-task-use-c
 import {GetTaskByIdUseCase} from "../domain/contracts/use-cases/get-one-task-use-case";
 import {UpdateTaskUseCase} from "../domain/contracts/use-cases/update-task-use-case";
 import {UpdateStatusTaskUseCase} from "../domain/contracts/use-cases/update-status-task-use-case";
+import {DeleteTaskUseCase} from "../domain/contracts/use-cases/delete-task-use-case";
 
 
 export default function TaskRouter(
@@ -12,7 +13,8 @@ export default function TaskRouter(
     getOneTaskUseCase: GetTaskByIdUseCase,
     createTaskUseCase: CreateTaskUseCase,
     updateTaskUseCase: UpdateTaskUseCase,
-    updateStatusTaskUseCase: UpdateStatusTaskUseCase
+    updateStatusTaskUseCase: UpdateStatusTaskUseCase,
+    deleteTaskUseCase: DeleteTaskUseCase
 ) {
     const router = express.Router()
 
@@ -71,6 +73,16 @@ export default function TaskRouter(
         } catch (err) {
             console.log(err);
             res.status(500).send({ message: "Error updating status data" })
+        }
+    });
+
+    router.delete('/:id', async (req: Request, res: Response) => {
+        try {
+            await deleteTaskUseCase.execute(req.params.id);
+            res.json({ message: "Deleted" })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ message: "Error deleting data" })
         }
     })
 

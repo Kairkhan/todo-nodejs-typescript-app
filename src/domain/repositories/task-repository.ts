@@ -4,11 +4,13 @@ import {TaskDataSource} from "../../data/contracts/data-sources/task-data-source
 import {CreateTaskRepository} from "../contracts/repositories/create-task-repository";
 import {GetTasksRepository} from "../contracts/repositories/get-tasks-repository";
 import {UpdateTaskRepository} from "../contracts/repositories/update-task-repository";
+import {DeleteTaskRepository} from "../contracts/repositories/delete-task-repository";
 
 export class TaskRepositoryImpl implements
     GetTaskByIdRepository,
     CreateTaskRepository,
     UpdateTaskRepository,
+    DeleteTaskRepository,
     GetTasksRepository {
 
     constructor(private readonly taskDataSource: TaskDataSource) {}
@@ -27,5 +29,9 @@ export class TaskRepositoryImpl implements
 
     async update(task: Task): Promise<boolean> {
         return await this.taskDataSource.update(task);
+    }
+
+    async delete(task: Task): Promise<boolean> {
+        return await this.taskDataSource.delete(task);
     }
 }
