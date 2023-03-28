@@ -1,4 +1,4 @@
-import {GetTaskByIdUseCase} from "../../contracts/use-cases/get-one-task";
+import {GetTaskByIdUseCase} from "../../contracts/use-cases/get-one-task-use-case";
 import {Task} from "../../entities/task";
 import {GetTaskByIdRepository} from "../../contracts/repositories/get-task-by-id-repository";
 

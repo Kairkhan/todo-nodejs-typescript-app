@@ -1,14 +1,16 @@
 import express from 'express'
 import { Request, Response } from 'express'
-import {GetAllTasksUseCase} from "../domain/contracts/use-cases/get-all-tasks";
-import {CreateTaskUseCase} from "../domain/contracts/use-cases/create-task";
-import {GetTaskByIdUseCase} from "../domain/contracts/use-cases/get-one-task";
+import {GetAllTasksUseCase} from "../domain/contracts/use-cases/get-all-tasks-use-case";
+import {CreateTaskUseCase} from "../domain/contracts/use-cases/create-task-use-case";
+import {GetTaskByIdUseCase} from "../domain/contracts/use-cases/get-one-task-use-case";
+import {UpdateTaskUseCase} from "../domain/contracts/use-cases/update-task-use-case";
 
 
 export default function TaskRouter(
     getAllTasksUseCase: GetAllTasksUseCase,
     getOneTaskUseCase: GetTaskByIdUseCase,
-    createTaskUseCase: CreateTaskUseCase
+    createTaskUseCase: CreateTaskUseCase,
+    updateTaskUseCase: UpdateTaskUseCase,
 ) {
     const router = express.Router()
 
@@ -37,6 +39,17 @@ export default function TaskRouter(
             res.json({ message: "Created" })
         } catch (err) {
             res.status(500).send({ message: "Error saving data" })
+        }
+    })
+
+    router.put('/:id', async (req: Request, res: Response) => {
+        try {
+            await updateTaskUseCase.execute(req.params.id, req.body)
+            res.statusCode = 201
+            res.json({ message: "Updated" })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ message: "Error updating data" })
         }
     })
 

@@ -1,4 +1,4 @@
-import {CreateTaskUseCase} from "../../contracts/use-cases/create-task";
+import {CreateTaskUseCase} from "../../contracts/use-cases/create-task-use-case";
 import {Task} from "../../entities/task";
 import {CreateTaskRepository} from "../../contracts/repositories/create-task-repository";
 

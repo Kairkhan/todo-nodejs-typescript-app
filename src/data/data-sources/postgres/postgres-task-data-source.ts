@@ -33,4 +33,15 @@ export class PostgresTaskDataSource implements TaskDataSource {
             status: first.status
         });
     }
+
+    async update(task: Task): Promise<boolean> {
+        const result = await this.database.query(`
+            update ${DB_TABLE}
+            SET title = $1,
+                description = $2
+            WHERE id = $3;
+        `, [task.title, task.description, task.id]);
+
+        return result !== null;
+    }
 }

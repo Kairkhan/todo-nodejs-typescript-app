@@ -6,6 +6,7 @@ import {GetAllTasks} from "./domain/use-cases/task/get-all-tasks";
 import {TaskRepositoryImpl} from "./domain/repositories/task-repository";
 import {CreateTask} from "./domain/use-cases/task/create-task";
 import {GetOneTask} from "./domain/use-cases/task/get-one-task";
+import {UpdateTask} from "./domain/use-cases/task/update-task";
 
 async function getPGDS() {
 
@@ -27,7 +28,8 @@ async function getPGDS() {
         new GetAllTasks(new TaskRepositoryImpl(dataSource)),
         new GetOneTask(new TaskRepositoryImpl(dataSource)),
         new CreateTask(new TaskRepositoryImpl(dataSource)),
-    )
+        new UpdateTask(new TaskRepositoryImpl(dataSource), new TaskRepositoryImpl(dataSource))
+    );
 
     server.use("/tasks", taskMiddleware)
     server.listen(4000, () => console.log("Running on http://localhost:4000"))
