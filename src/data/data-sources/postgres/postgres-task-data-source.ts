@@ -22,4 +22,15 @@ export class PostgresTaskDataSource implements TaskDataSource {
             status: item.status
         }));
     }
+
+    async getOneById(id: string): Promise<Task> {
+        const result = await this.database.query(`select * from ${DB_TABLE} where id = ${id}`);
+        const first = result.rows[0];
+        return Promise.resolve({
+            id: first.id.toString(),
+            title: first.title,
+            description: first.description,
+            status: first.status
+        });
+    }
 }

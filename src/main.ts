@@ -5,6 +5,7 @@ import TaskRouter from "./presentation/task-router";
 import {GetAllTasks} from "./domain/use-cases/task/get-all-tasks";
 import {TaskRepositoryImpl} from "./domain/repositories/task-repository";
 import {CreateTask} from "./domain/use-cases/task/create-task";
+import {GetOneTask} from "./domain/use-cases/task/get-one-task";
 
 async function getPGDS() {
 
@@ -24,6 +25,7 @@ async function getPGDS() {
 
     const taskMiddleware = TaskRouter(
         new GetAllTasks(new TaskRepositoryImpl(dataSource)),
+        new GetOneTask(new TaskRepositoryImpl(dataSource)),
         new CreateTask(new TaskRepositoryImpl(dataSource)),
     )
 

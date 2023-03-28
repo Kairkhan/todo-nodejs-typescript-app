@@ -1,9 +1,9 @@
 import {GetAllTasksUseCase} from "../../contracts/use-cases/get-all-tasks";
-import {TaskRepository} from "../../contracts/repositories/task-repository";
 import {Task} from "../../entities/task";
+import {GetTasksRepository} from "../../contracts/repositories/get-tasks-repository";
 
 export class GetAllTasks implements GetAllTasksUseCase {
-    constructor(private readonly repository: TaskRepository) {}
+    constructor(private readonly repository: GetTasksRepository) {}
 
     async execute(): Promise<Task[]> {
         return await this.repository.getTasks();
