@@ -38,9 +38,10 @@ export class PostgresTaskDataSource implements TaskDataSource {
         const result = await this.database.query(`
             update ${DB_TABLE}
             SET title = $1,
-                description = $2
-            WHERE id = $3;
-        `, [task.title, task.description, task.id]);
+                description = $2,
+                status = $3
+            WHERE id = $4;
+        `, [task.title, task.description, task.status, task.id]);
 
         return result !== null;
     }

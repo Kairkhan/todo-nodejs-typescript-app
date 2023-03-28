@@ -7,6 +7,7 @@ import {TaskRepositoryImpl} from "./domain/repositories/task-repository";
 import {CreateTask} from "./domain/use-cases/task/create-task";
 import {GetOneTask} from "./domain/use-cases/task/get-one-task";
 import {UpdateTask} from "./domain/use-cases/task/update-task";
+import {UpdateStatusTask} from "./domain/use-cases/task/update-status-task";
 
 async function getPGDS() {
 
@@ -28,7 +29,8 @@ async function getPGDS() {
         new GetAllTasks(new TaskRepositoryImpl(dataSource)),
         new GetOneTask(new TaskRepositoryImpl(dataSource)),
         new CreateTask(new TaskRepositoryImpl(dataSource)),
-        new UpdateTask(new TaskRepositoryImpl(dataSource), new TaskRepositoryImpl(dataSource))
+        new UpdateTask(new TaskRepositoryImpl(dataSource), new TaskRepositoryImpl(dataSource)),
+        new UpdateStatusTask(new TaskRepositoryImpl(dataSource), new TaskRepositoryImpl(dataSource))
     );
 
     server.use("/tasks", taskMiddleware)

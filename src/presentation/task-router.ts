@@ -4,6 +4,7 @@ import {GetAllTasksUseCase} from "../domain/contracts/use-cases/get-all-tasks-us
 import {CreateTaskUseCase} from "../domain/contracts/use-cases/create-task-use-case";
 import {GetTaskByIdUseCase} from "../domain/contracts/use-cases/get-one-task-use-case";
 import {UpdateTaskUseCase} from "../domain/contracts/use-cases/update-task-use-case";
+import {UpdateStatusTaskUseCase} from "../domain/contracts/use-cases/update-status-task-use-case";
 
 
 export default function TaskRouter(
@@ -11,6 +12,7 @@ export default function TaskRouter(
     getOneTaskUseCase: GetTaskByIdUseCase,
     createTaskUseCase: CreateTaskUseCase,
     updateTaskUseCase: UpdateTaskUseCase,
+    updateStatusTaskUseCase: UpdateStatusTaskUseCase
 ) {
     const router = express.Router()
 
@@ -21,7 +23,7 @@ export default function TaskRouter(
         } catch (err) {
             res.status(500).send({ message: "Error fetching data" })
         }
-    })
+    });
 
     router.get('/:id', async (req: Request, res: Response) => {
         try {
@@ -30,7 +32,7 @@ export default function TaskRouter(
         } catch (err) {
             res.status(500).send({ message: "Error fetching data" })
         }
-    })
+    });
 
     router.post('/', async (req: Request, res: Response) => {
         try {
@@ -40,16 +42,35 @@ export default function TaskRouter(
         } catch (err) {
             res.status(500).send({ message: "Error saving data" })
         }
-    })
+    });
 
     router.put('/:id', async (req: Request, res: Response) => {
         try {
             await updateTaskUseCase.execute(req.params.id, req.body)
-            res.statusCode = 201
             res.json({ message: "Updated" })
         } catch (err) {
             console.log(err);
             res.status(500).send({ message: "Error updating data" })
+        }
+    });
+
+    router.put('/:id/in-progress', async (req: Request, res: Response) => {
+        try {
+            await updateStatusTaskUseCase.execute(req.params.id, 'in-progress');
+            res.json({ message: "Status Updated" })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ message: "Error updating status data" })
+        }
+    });
+
+    router.put('/:id/backlog', async (req: Request, res: Response) => {
+        try {
+            await updateStatusTaskUseCase.execute(req.params.id, 'backlog');
+            res.json({ message: "Status Updated" })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send({ message: "Error updating status data" })
         }
     })
 

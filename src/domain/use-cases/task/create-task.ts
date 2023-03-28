@@ -6,6 +6,9 @@ export class CreateTask implements CreateTaskUseCase {
     constructor(private readonly repository: CreateTaskRepository) {}
 
     async execute(task: Task): Promise<boolean> {
+
+        task.status = 'backlog';
+
         return await this.repository.create(task);
     }
 }
