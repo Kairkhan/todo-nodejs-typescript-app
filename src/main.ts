@@ -1,41 +1,24 @@
-import server from './server'
-import { Pool } from 'pg'
-import {PostgresTaskDataSource} from "./data/data-sources/postgres/postgres-task-data-source";
-import TaskRouter from "./presentation/task-router";
-import {GetAllTasks} from "./domain/use-cases/task/get-all-tasks";
-import {TaskRepositoryImpl} from "./domain/repositories/task-repository";
-import {CreateTask} from "./domain/use-cases/task/create-task";
-import {GetOneTask} from "./domain/use-cases/task/get-one-task";
-import {UpdateTask} from "./domain/use-cases/task/update-task";
-import {UpdateStatusTask} from "./domain/use-cases/task/update-status-task";
-import {DeleteTask} from "./domain/use-cases/task/delete-task";
+import { ApolloServer } from "apollo-server-express";
+import Schema from "./presentation/graphql/schema/task-schema";
+import Resolvers from "./presentation/graphql/resolvers/task-resolver";
+import express from "express";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import http from "http";
 
-async function getPGDS() {
-
-    const db = new Pool({
-        user: 'root',
-        host: 'localhost',
-        database: 'todoapp',
-        password: 'docker',
-        port: 5432,
-    })
-    return new PostgresTaskDataSource(db)
+async function startApolloServer(typeDefs: any, resolvers: any) {
+    const app = express();
+    const httpServer = http.createServer(app);
+    const server = new ApolloServer({
+        typeDefs,
+        resolvers,
+        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    }) as any;
+    await server.start();
+    server.applyMiddleware({ app });
+    await new Promise<void>((resolve) =>
+        httpServer.listen({ port: 4000 }, resolve)
+    );
+    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
-
-(async () => {
-    const dataSource = await getPGDS();
-
-    const taskMiddleware = TaskRouter(
-        new GetAllTasks(new TaskRepositoryImpl(dataSource)),
-        new GetOneTask(new TaskRepositoryImpl(dataSource)),
-        new CreateTask(new TaskRepositoryImpl(dataSource)),
-        new UpdateTask(new TaskRepositoryImpl(dataSource), new TaskRepositoryImpl(dataSource)),
-        new UpdateStatusTask(new TaskRepositoryImpl(dataSource), new TaskRepositoryImpl(dataSource)),
-        new DeleteTask(new TaskRepositoryImpl(dataSource), new TaskRepositoryImpl(dataSource))
-    );
-
-    server.use("/tasks", taskMiddleware)
-    server.listen(4000, () => console.log("Running on http://localhost:4000"))
-
-})()
+startApolloServer(Schema, Resolvers);
